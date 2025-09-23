@@ -4,13 +4,103 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Advocacy for Youth Financial Rights</title>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  max-width: 700px;
+  margin: auto;
+  padding: 20px;
+  line-height: 1.6;
+}
+h1, h2 { text-align: center; }
+button {
+  background-color: #0073e6;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover { background-color: #005bb5; }
+#joinForm {
+  display: none;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 6px;
+}
+input {
+  display: block;
+  width: 95%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+#status {
+  margin-top: 15px;
+  font-weight: bold;
+}
+</style>
+<script>
+function toggleForm() {
+  const form = document.getElementById("joinForm");
+  form.style.display = form.style.display === "none" ? "block" : "none";
+}
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAmj4C2guBN1_wFMsBD-_hgU9OY8JDcyhA",
+  authDomain: "afyfr-1ded0.firebaseapp.com",
+  projectId: "afyfr-1ded0",
+  storageBucket: "afyfr-1ded0.firebasestorage.app",
+  messagingSenderId: "785090560051",
+  appId: "1:785090560051:web:f3c95d60d8177f36086346",
+  measurementId: "G-31LWJC00MT"
+};
+
+const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+function signup(event) {
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(userCredential => {
+      document.getElementById("status").innerText = 
+        "Welcome, " + username + "! Your account was created.";
+    })
+    .catch(error => {
+      document.getElementById("status").innerText = error.message;
+    });
+}
+</script>
 </head>
 <body>
+
 <h1>Advocacy for Youth Financial Rights</h1>
 <p>Our mission is to eliminate age-based barriers to financial opportunity by raising funds to support policy change in Congress.</p>
 
 <h2>About Us</h2>
 <p>We are a new organization committed to ensuring young people have the same rights to pursue enterprise and investment as adults. Our approach is straightforward: mobilize supporters, gather resources, and drive advocacy where it matters most.</p>
+
+<h2>Get Involved</h2>
+<button onclick="toggleForm()">Join Now</button>
+
+<div id="joinForm">
+  <h3>Create an Account</h3>
+  <form onsubmit="signup(event)">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Sign Up</button>
+  </form>
+  <p id="status"></p>
+</div>
 
 
 </body>
