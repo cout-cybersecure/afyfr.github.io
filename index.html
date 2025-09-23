@@ -51,12 +51,50 @@ input {
   border-radius: 6px;
 }
 </style>
-<script>
-function toggleForm() {
-  const form = document.getElementById("joinForm");
-  form.style.display = form.style.display === "none" ? "block" : "none";
-}
+</head>
+<body>
 
+<h1>Advocacy for Youth Financial Rights</h1>
+<p>Our mission is to eliminate age-based barriers to financial opportunity by raising funds to support policy change in Congress.</p>
+
+<h2>About Us</h2>
+<p>We are a new organization committed to ensuring young people have the same rights to pursue enterprise and investment as adults. Our approach is straightforward: mobilize supporters, gather resources, and drive advocacy where it matters most.</p>
+
+<h2>Get Involved</h2>
+<button id="joinBtn">Join Now</button>
+
+<div id="joinForm">
+  <h3>Create an Account</h3>
+  <form id="signupForm">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Sign Up</button>
+  </form>
+  <p id="status"></p>
+</div>
+
+<div id="loginForm" style="margin-top:20px;">
+  <h3>Login</h3>
+  <form id="loginRealForm">
+    <input type="email" id="loginEmail" placeholder="Email" required>
+    <input type="password" id="loginPassword" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+  <p id="loginStatus"></p>
+</div>
+
+<button onclick="logout()" id="logoutBtn" style="display:none; margin-top:10px;">Logout</button>
+
+<div id="membersArea">
+  <h3>Members Only</h3>
+  <p>Welcome to the private section. Here you’ll find exclusive updates and resources once you are verified and logged in.</p>
+</div>
+
+ 
+
+<script>
+// Firebase config (replace with your values)
 const firebaseConfig = {
   apiKey: "AIzaSyAmj4C2guBN1_wFMsBD-_hgU9OY8JDcyhA",
   authDomain: "afyfr-1ded0.firebaseapp.com",
@@ -66,12 +104,18 @@ const firebaseConfig = {
   appId: "1:785090560051:web:f3c95d60d8177f36086346",
   measurementId: "G-31LWJC00MT"
 };
-  
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
-function signup(event) {
-  event.preventDefault();
+// Toggle Join Form
+document.getElementById("joinBtn").addEventListener("click", () => {
+  document.getElementById("joinForm").style.display = "block";
+});
+
+// Signup
+document.getElementById("signupForm").addEventListener("submit", (e) => {
+  e.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const username = document.getElementById("username").value;
@@ -91,10 +135,11 @@ function signup(event) {
     .catch(error => {
       document.getElementById("status").innerText = error.message;
     });
-}
+});
 
-function login(event) {
-  event.preventDefault();
+// Login
+document.getElementById("loginRealForm").addEventListener("submit", (e) => {
+  e.preventDefault();
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
@@ -102,21 +147,20 @@ function login(event) {
     .then(userCredential => {
       const user = userCredential.user;
       if (user.emailVerified) {
-        document.getElementById("loginStatus").innerText =
-          "Welcome back, " + user.email + "!";
+        document.getElementById("loginStatus").innerText = "Welcome back, " + user.email + "!";
         document.getElementById("logoutBtn").style.display = "block";
         document.getElementById("membersArea").style.display = "block";
       } else {
-        document.getElementById("loginStatus").innerText =
-          "Please verify your email before logging in.";
+        document.getElementById("loginStatus").innerText = "Please verify your email before logging in.";
         auth.signOut();
       }
     })
     .catch(error => {
       document.getElementById("loginStatus").innerText = error.message;
     });
-}
+});
 
+// Logout
 function logout() {
   auth.signOut().then(() => {
     document.getElementById("loginStatus").innerText = "You have logged out.";
@@ -125,48 +169,5 @@ function logout() {
   });
 }
 </script>
-</head>
-<body>
-
-<h1>Advocacy for Youth Financial Rights</h1>
-<p>Our mission is to eliminate age-based barriers to financial opportunity by raising funds to support policy change in Congress.</p>
-
-<h2>About Us</h2>
-<p>We are a new organization committed to ensuring young people have the same rights to pursue enterprise and investment as adults. Our approach is straightforward: mobilize supporters, gather resources, and drive advocacy where it matters most.</p>
-
-<h2>Get Involved</h2>
-<button onclick="toggleForm()">Join Now</button>
-
-<div id="joinForm">
-  <h3>Create an Account</h3>
-  <form onsubmit="signup(event)">
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
-    <button type="submit">Sign Up</button>
-  </form>
-  <p id="status"></p>
-</div>
-
-<div id="loginForm" style="display:block; margin-top:20px;">
-  <h3>Login</h3>
-  <form onsubmit="login(event)">
-    <input type="email" id="loginEmail" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
-    <button type="submit">Login</button>
-  </form>
-  <p id="loginStatus"></p>
-</div>
-
-<button onclick="logout()" id="logoutBtn" style="display:none; margin-top:10px;">Logout</button>
-
-<div id="membersArea">
-  <h3>Members Only</h3>
-  <p>Welcome to the private section. Here you’ll find exclusive updates and resources once you are verified and logged in.</p>
-</div>
-
-<h2>Contact</h2>
-<p>Email us at: yourname@example.com</p>
-
 </body>
 </html>
